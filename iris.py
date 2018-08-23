@@ -1,3 +1,6 @@
+### With guiding from
+### https://machinelearningmastery.com/machine-learning-in-python-step-by-step/
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -5,8 +8,8 @@ import matplotlib.pyplot as plt
 from sklearn import model_selection
 from sklearn.model_selection import GridSearchCV, train_test_split, KFold, \
                                     cross_val_score, StratifiedKFold
-from sklearn.metrics import accuracy_score, precision_score, recall_score
-
+from sklearn.metrics import accuracy_score, precision_score, recall_score, \
+                                classification_report, confusion_matrix
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -22,7 +25,7 @@ dataset = pd.read_csv('iris_working.csv', header =None,
 features = dataset.values[:,0:4]
 labels = dataset.values[:,4]
 features_train, features_test, labels_train, labels_test = \
-    train_test_split(features, labels, test_size=0.2, random_state=7)
+    train_test_split(features, labels, test_size=0.2)
 
 
 ## Do a quick algorithm check for performance
@@ -41,4 +44,11 @@ for name, model in models:
 	results.append(cv_results)
 	names.append(name)
 	msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
-	print(msg)
+	# print(msg)
+
+clf = SVC(kernel = 'linear')
+clf.fit(features_train, labels_train)
+pred = clf.predict(features_test)
+print(accuracy_score(labels_test, pred))
+print(confusion_matrix(labels_test, pred))
+print(classification_report(labels_test, pred))
